@@ -1,0 +1,214 @@
+{
+  "labour": {
+    "unpaid_salary": {
+      "rights": [
+        "Right to receive salary on time every month",
+        "Right to claim full salary for days worked",
+        "Right to be informed of any deductions"
+      ],
+      "law": [
+        "Payment of Wages Act, 1936",
+        "Industrial Disputes Act, 1947"
+      ],
+      "steps": [
+        "Send a formal email to HR and your manager",
+        "Send a legal notice via a lawyer if there is no response",
+        "File a complaint with the Labor Commissioner's office",
+        "Approach the Labor Court if the matter is not resolved"
+      ],
+      "documents": [
+        "Appointment letter",
+        "Salary slips",
+        "Bank statements showing previous credits",
+        "Attendance records or emails"
+      ]
+    },
+    "wrongful_termination": {
+      "rights": [
+        "Right to a notice period or salary in lieu of notice",
+        "Right to know the reason for termination",
+        "Right to a fair hearing before being fired"
+      ],
+      "law": [
+        "Industrial Disputes Act, 1947",
+        "Shops and Establishments Act (State specific)"
+      ],
+      "steps": [
+        "Review your employment contract for termination clauses",
+        "Request a written explanation for the termination",
+        "File a dispute with the local Labor Department",
+        "Seek reinstatement or compensation through Labor Court"
+      ],
+      "documents": [
+        "Termination letter",
+        "Employment contract",
+        "Company policy manual",
+        "Past performance appraisals"
+      ]
+    },
+    "overtime_issue": {
+      "rights": [
+        "Right to receive double the normal hourly rate for overtime",
+        "Right to refuse excessive working hours beyond legal limits",
+        "Right to documented records of overtime hours worked"
+      ],
+      "law": [
+        "Factories Act, 1948",
+        "Minimum Wages Act, 1948"
+      ],
+      "steps": [
+        "Maintain a personal log of daily entry and exit times",
+        "Submit a written request for overtime payment to the accounts department",
+        "Report the violation to the Factory Inspector or Labor Inspector",
+        "File a claim for unpaid wages under the Payment of Wages Act"
+      ],
+      "documents": [
+        "Timesheets or biometric logs",
+        "Work logs or project completion emails",
+        "Employment contract mentioning work hours",
+        "Previous salary slips"
+      ]
+    }
+  },
+  "tenant": {
+    "eviction": {
+      "rights": [
+        "Right to stay in the property until the legal notice period ends",
+        "Right to be protected from forceful or physical eviction",
+        "Right to basic amenities like water and electricity"
+      ],
+      "law": [
+        "Rent Control Act (State specific)",
+        "Transfer of Property Act, 1882"
+      ],
+      "steps": [
+        "Check if the eviction notice complies with the rent agreement",
+        "Reply to the eviction notice through a legal counsel",
+        "File for an injunction in Civil Court to prevent forceful eviction",
+        "Lodge a police complaint if the landlord cuts off utilities"
+      ],
+      "documents": [
+        "Registered Rent Agreement",
+        "Rent payment receipts",
+        "Eviction notice received",
+        "Utility bills paid"
+      ]
+    },
+    "deposit_issue": {
+      "rights": [
+        "Right to receive the security deposit back within the agreed timeframe",
+        "Right to a transparent list of deductions for repairs",
+        "Right to full refund if no damage is caused to the property"
+      ],
+      "law": [
+        "Model Tenancy Act, 2021",
+        "Indian Contract Act, 1872"
+      ],
+      "steps": [
+        "Take photos of the house condition when vacating",
+        "Request a final walkthrough with the landlord",
+        "Send a written demand for the refund of the deposit",
+        "File a case in the Small Causes Court or with the Rent Authority"
+      ],
+      "documents": [
+        "Security deposit receipt or bank transfer proof",
+        "Move-out notice copy",
+        "Photos of the empty property",
+        "Initial inspection report"
+      ]
+    },
+    "rent_dispute": {
+      "rights": [
+        "Right to pay only the rent agreed upon in the contract",
+        "Right to receive a receipt for every rent payment",
+        "Right to fair rent as determined by the Rent Controller"
+      ],
+      "law": [
+        "Rent Control Act",
+        "The Model Tenancy Act"
+      ],
+      "steps": [
+        "Communicate with the landlord to resolve the disagreement",
+        "Deposit the rent with the Rent Controller if the landlord refuses to accept it",
+        "Apply for 'Fair Rent' fixing through the local Rent Authority",
+        "Keep records of all previous rent increases and payments"
+      ],
+      "documents": [
+        "Rent agreement",
+        "Previous rent receipts",
+        "Communication logs with the landlord",
+        "Market rate proof of similar properties"
+      ]
+    }
+  },
+  "consumer": {
+    "product_defect": {
+      "rights": [
+        "Right to receive a product that is safe and functional",
+        "Right to a replacement for a manufacturing defect",
+        "Right to be protected against deceptive marketing"
+      ],
+      "law": [
+        "Consumer Protection Act, 2019"
+      ],
+      "steps": [
+        "Contact the customer care of the brand immediately",
+        "Register a complaint on the National Consumer Helpline",
+        "Send a formal notice to the seller and manufacturer",
+        "File a petition in the District Consumer Disputes Redressal Commission"
+      ],
+      "documents": [
+        "Purchase invoice or bill",
+        "Warranty card",
+        "Photos or videos of the defect",
+        "Customer care complaint number"
+      ]
+    },
+    "refund_issue": {
+      "rights": [
+        "Right to a full refund if a service is not provided",
+        "Right to a refund if an order is cancelled by the seller",
+        "Right to receive the refund within a reasonable time"
+      ],
+      "law": [
+        "Consumer Protection (E-Commerce) Rules, 2020",
+        "Consumer Protection Act, 2019"
+      ],
+      "steps": [
+        "Check the refund policy of the website or store",
+        "Send a written request for a refund with the order details",
+        "File a chargeback request with your bank if paid by card",
+        "File a case in Consumer Court if the amount is high"
+      ],
+      "documents": [
+        "Order confirmation email or screenshot",
+        "Payment proof",
+        "Cancellation confirmation",
+        "Email thread with the seller"
+      ]
+    },
+    "warranty_issue": {
+      "rights": [
+        "Right to free repairs during the warranty period",
+        "Right to extension of warranty if the product is in repair for long",
+        "Right to free replacement if the product cannot be repaired"
+      ],
+      "law": [
+        "Consumer Protection Act, 2019",
+        "Indian Contract Act, 1872"
+      ],
+      "steps": [
+        "Visit an authorized service center with the warranty card",
+        "Obtain a job sheet or service report from the center",
+        "Escalate the issue to the company's nodal officer",
+        "File a complaint for 'unfair trade practice' in Consumer Court"
+      ],
+      "documents": [
+        "Original tax invoice",
+        "Stamped warranty card",
+        "Previous service/repair records",
+        "Photos of the product serial number"
+      ]
+    }
+  }
+}
