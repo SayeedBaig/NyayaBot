@@ -1,213 +1,314 @@
 {
   "labour": {
     "unpaid_salary": {
+      "keywords": ["salary", "wages", "pay", "unpaid", "not paid", "payment delayed"],
       "rights": [
-        "Right to receive salary on time every month",
-        "Right to claim full salary for days worked",
-        "Right to be informed of any deductions"
+        "You have the right to receive salary for all days worked.",
+        "Your employer cannot withhold earned wages without a lawful reason.",
+        "You can ask for written salary records and deduction details.",
+        "You can complain to the Labour Department if salary is delayed."
       ],
       "law": [
         "Payment of Wages Act, 1936",
-        "Industrial Disputes Act, 1947"
+        "Code on Wages, 2019",
+        "Shops and Establishments Act of the relevant State"
       ],
       "steps": [
-        "Send a formal email to HR and your manager",
-        "Send a legal notice via a lawyer if there is no response",
-        "File a complaint with the Labor Commissioner's office",
-        "Approach the Labor Court if the matter is not resolved"
+        "Send a written email or letter to HR asking for pending salary with dates.",
+        "Keep a copy of all messages, payslips, attendance records, and bank statements.",
+        "If there is no response, send a legal notice through a lawyer or labour union.",
+        "File a complaint with the local Labour Commissioner or Labour Department."
       ],
       "documents": [
-        "Appointment letter",
+        "Appointment letter or offer letter",
         "Salary slips",
-        "Bank statements showing previous credits",
-        "Attendance records or emails"
+        "Bank statements",
+        "Attendance records, emails, or chat proof"
       ]
     },
     "wrongful_termination": {
+      "keywords": ["fired", "terminated", "removed", "dismissed", "job ended", "without notice"],
       "rights": [
-        "Right to a notice period or salary in lieu of notice",
-        "Right to know the reason for termination",
-        "Right to a fair hearing before being fired"
+        "You have the right to notice or salary in lieu of notice if your contract provides it.",
+        "You can ask for the termination reason in writing.",
+        "Termination cannot be illegal, discriminatory, or against service rules.",
+        "Eligible workmen can raise an industrial dispute."
       ],
       "law": [
         "Industrial Disputes Act, 1947",
-        "Shops and Establishments Act (State specific)"
+        "Shops and Establishments Act of the relevant State",
+        "Indian Contract Act, 1872"
       ],
       "steps": [
-        "Review your employment contract for termination clauses",
-        "Request a written explanation for the termination",
-        "File a dispute with the local Labor Department",
-        "Seek reinstatement or compensation through Labor Court"
+        "Read your appointment letter and company policy for notice rules.",
+        "Ask HR for written reasons and final settlement details.",
+        "Send a written representation requesting reinstatement or compensation.",
+        "Approach the Labour Department or Labour Court if the dispute continues."
       ],
       "documents": [
-        "Termination letter",
-        "Employment contract",
-        "Company policy manual",
-        "Past performance appraisals"
+        "Appointment letter",
+        "Termination letter or email",
+        "Salary slips",
+        "Performance records and HR communication"
       ]
     },
-    "overtime_issue": {
+    "overtime_nonpayment": {
+      "keywords": ["overtime", "extra hours", "12 hours", "late night", "double wages"],
       "rights": [
-        "Right to receive double the normal hourly rate for overtime",
-        "Right to refuse excessive working hours beyond legal limits",
-        "Right to documented records of overtime hours worked"
+        "You have the right to wages for overtime work where the law applies.",
+        "Employers must follow legal working-hour limits.",
+        "You can ask for records of attendance and overtime.",
+        "You can complain if overtime is forced or unpaid."
       ],
       "law": [
         "Factories Act, 1948",
-        "Minimum Wages Act, 1948"
+        "Code on Wages, 2019",
+        "Shops and Establishments Act of the relevant State"
       ],
       "steps": [
-        "Maintain a personal log of daily entry and exit times",
-        "Submit a written request for overtime payment to the accounts department",
-        "Report the violation to the Factory Inspector or Labor Inspector",
-        "File a claim for unpaid wages under the Payment of Wages Act"
+        "Prepare a date-wise list of extra hours worked.",
+        "Ask HR or accounts for overtime payment in writing.",
+        "Collect shift rosters, biometric logs, emails, and manager instructions.",
+        "File a complaint with the Labour Inspector if payment is denied."
       ],
       "documents": [
-        "Timesheets or biometric logs",
-        "Work logs or project completion emails",
-        "Employment contract mentioning work hours",
-        "Previous salary slips"
+        "Attendance logs",
+        "Shift roster",
+        "Salary slips",
+        "Emails or chats assigning extra work"
+      ]
+    },
+    "pf_esi_issue": {
+      "keywords": ["pf", "provident fund", "esi", "uan", "epfo", "deducted"],
+      "rights": [
+        "Eligible employees have the right to provident fund and ESI benefits.",
+        "Deductions from salary must be deposited with the relevant authority.",
+        "You can check contributions using your UAN or ESI number.",
+        "You can complain if deductions are made but not deposited."
+      ],
+      "law": [
+        "Employees' Provident Funds and Miscellaneous Provisions Act, 1952",
+        "Employees' State Insurance Act, 1948"
+      ],
+      "steps": [
+        "Check your EPFO passbook or ESI portal for contribution entries.",
+        "Ask HR for UAN, ESI number, and contribution proof.",
+        "Raise a grievance on the EPFO or ESIC portal.",
+        "Complain to the regional PF or ESI office if the employer does not respond."
+      ],
+      "documents": [
+        "Salary slips showing deduction",
+        "UAN or ESI number",
+        "Bank statements",
+        "HR communication"
       ]
     }
   },
   "tenant": {
-    "eviction": {
+    "illegal_eviction": {
+      "keywords": ["evict", "vacate", "throw out", "leave house", "forcefully remove"],
       "rights": [
-        "Right to stay in the property until the legal notice period ends",
-        "Right to be protected from forceful or physical eviction",
-        "Right to basic amenities like water and electricity"
+        "A landlord generally cannot evict you without due legal process.",
+        "You have the right to peaceful possession during the tenancy.",
+        "Basic utilities cannot be cut to force you to leave.",
+        "You can seek police help or court protection against forceful eviction."
       ],
       "law": [
-        "Rent Control Act (State specific)",
-        "Transfer of Property Act, 1882"
+        "Transfer of Property Act, 1882",
+        "Rent Control Act of the relevant State",
+        "Model Tenancy Act, 2021"
       ],
       "steps": [
-        "Check if the eviction notice complies with the rent agreement",
-        "Reply to the eviction notice through a legal counsel",
-        "File for an injunction in Civil Court to prevent forceful eviction",
-        "Lodge a police complaint if the landlord cuts off utilities"
+        "Check your rent agreement for notice period and termination clause.",
+        "Reply in writing if the landlord is forcing you to vacate.",
+        "Do not sign any blank or forced document.",
+        "Approach police or civil court if there is threat, lockout, or utility disconnection."
       ],
       "documents": [
-        "Registered Rent Agreement",
-        "Rent payment receipts",
-        "Eviction notice received",
-        "Utility bills paid"
+        "Rent agreement",
+        "Rent receipts or bank transfer proof",
+        "Eviction notice or messages",
+        "Photos, videos, or witness details"
       ]
     },
-    "deposit_issue": {
+    "deposit_not_returned": {
+      "keywords": ["deposit", "security", "advance", "not returning", "refund deposit"],
       "rights": [
-        "Right to receive the security deposit back within the agreed timeframe",
-        "Right to a transparent list of deductions for repairs",
-        "Right to full refund if no damage is caused to the property"
+        "You can claim return of security deposit after lawful deductions.",
+        "The landlord should explain deductions with proof.",
+        "Normal wear and tear should not be treated as damage.",
+        "You can recover deposit through legal notice or civil proceedings."
       ],
       "law": [
+        "Indian Contract Act, 1872",
+        "Model Tenancy Act, 2021",
+        "Rent Control Act of the relevant State"
+      ],
+      "steps": [
+        "Send a written demand for refund with bank details.",
+        "Ask for a break-up of deductions and repair bills.",
+        "Share move-out photos showing property condition.",
+        "Send a legal notice and approach the Rent Authority or civil court if needed."
+      ],
+      "documents": [
+        "Rent agreement",
+        "Deposit payment proof",
+        "Move-in and move-out photos",
+        "Chats or emails about refund"
+      ]
+    },
+    "landlord_harassment": {
+      "keywords": ["harass", "threat", "abuse", "entering", "water", "electricity", "lock"],
+      "rights": [
+        "You have the right to peaceful enjoyment of the rented property.",
+        "The landlord cannot enter without reasonable permission.",
+        "Threats, abuse, utility cuts, or lockouts can be challenged.",
+        "You can seek police help for intimidation or unlawful entry."
+      ],
+      "law": [
+        "Indian Penal Code, 1860",
+        "Transfer of Property Act, 1882",
+        "Rent Control Act of the relevant State"
+      ],
+      "steps": [
+        "Keep a dated record of harassment incidents.",
+        "Send a written warning asking the landlord to stop unlawful conduct.",
+        "Call police if there is threat, violence, lockout, or utility disconnection.",
+        "Seek an injunction from civil court for repeated harassment."
+      ],
+      "documents": [
+        "Rent agreement",
+        "Call recordings where legally obtained",
+        "Messages or emails",
+        "Photos, videos, or witness details"
+      ]
+    },
+    "rent_increase_dispute": {
+      "keywords": ["rent increase", "increase rent", "hike", "higher rent", "50 percent"],
+      "rights": [
+        "Rent increases must follow the rent agreement or applicable rent law.",
+        "You can dispute sudden or unfair rent hikes.",
+        "You have the right to receipts for rent paid.",
+        "You can approach the Rent Authority where available."
+      ],
+      "law": [
+        "Rent Control Act of the relevant State",
         "Model Tenancy Act, 2021",
         "Indian Contract Act, 1872"
       ],
       "steps": [
-        "Take photos of the house condition when vacating",
-        "Request a final walkthrough with the landlord",
-        "Send a written demand for the refund of the deposit",
-        "File a case in the Small Causes Court or with the Rent Authority"
-      ],
-      "documents": [
-        "Security deposit receipt or bank transfer proof",
-        "Move-out notice copy",
-        "Photos of the empty property",
-        "Initial inspection report"
-      ]
-    },
-    "rent_dispute": {
-      "rights": [
-        "Right to pay only the rent agreed upon in the contract",
-        "Right to receive a receipt for every rent payment",
-        "Right to fair rent as determined by the Rent Controller"
-      ],
-      "law": [
-        "Rent Control Act",
-        "The Model Tenancy Act"
-      ],
-      "steps": [
-        "Communicate with the landlord to resolve the disagreement",
-        "Deposit the rent with the Rent Controller if the landlord refuses to accept it",
-        "Apply for 'Fair Rent' fixing through the local Rent Authority",
-        "Keep records of all previous rent increases and payments"
+        "Check the rent escalation clause in your agreement.",
+        "Ask the landlord to give the rent increase demand in writing.",
+        "Continue paying agreed rent through traceable mode.",
+        "Approach the Rent Authority or civil court if the increase is unlawful."
       ],
       "documents": [
         "Rent agreement",
-        "Previous rent receipts",
-        "Communication logs with the landlord",
-        "Market rate proof of similar properties"
+        "Old rent receipts",
+        "Rent increase messages",
+        "Bank transfer proof"
       ]
     }
   },
   "consumer": {
-    "product_defect": {
+    "defective_product": {
+      "keywords": ["defective", "broken", "damaged", "not working", "faulty", "stopped working"],
       "rights": [
-        "Right to receive a product that is safe and functional",
-        "Right to a replacement for a manufacturing defect",
-        "Right to be protected against deceptive marketing"
+        "You have the right to receive safe and defect-free goods.",
+        "You can ask for repair, replacement, refund, or compensation.",
+        "Misleading product claims can be challenged.",
+        "You can file a consumer complaint if the seller refuses relief."
       ],
       "law": [
-        "Consumer Protection Act, 2019"
+        "Consumer Protection Act, 2019",
+        "Consumer Protection (E-Commerce) Rules, 2020"
       ],
       "steps": [
-        "Contact the customer care of the brand immediately",
-        "Register a complaint on the National Consumer Helpline",
-        "Send a formal notice to the seller and manufacturer",
-        "File a petition in the District Consumer Disputes Redressal Commission"
+        "Contact the seller or brand customer care immediately.",
+        "Record the defect with photos or videos.",
+        "Send a written complaint asking for refund, repair, or replacement.",
+        "File a complaint on National Consumer Helpline or Consumer Commission."
       ],
       "documents": [
-        "Purchase invoice or bill",
+        "Invoice or order confirmation",
         "Warranty card",
-        "Photos or videos of the defect",
-        "Customer care complaint number"
+        "Photos or videos of defect",
+        "Customer complaint number"
       ]
     },
-    "refund_issue": {
+    "refund_not_given": {
+      "keywords": ["refund", "money back", "cancelled", "not refunded", "return rejected"],
       "rights": [
-        "Right to a full refund if a service is not provided",
-        "Right to a refund if an order is cancelled by the seller",
-        "Right to receive the refund within a reasonable time"
+        "You can claim refund if the seller failed to deliver goods or services.",
+        "Refund terms must be clear and not unfair.",
+        "E-commerce platforms must provide grievance redressal.",
+        "You can claim compensation for unfair trade practice."
       ],
       "law": [
+        "Consumer Protection Act, 2019",
         "Consumer Protection (E-Commerce) Rules, 2020",
+        "Indian Contract Act, 1872"
+      ],
+      "steps": [
+        "Raise a refund request through the seller or platform in writing.",
+        "Keep order ID, ticket number, and refund timeline proof.",
+        "Escalate to the platform grievance officer.",
+        "File a complaint with the National Consumer Helpline or Consumer Commission."
+      ],
+      "documents": [
+        "Order details",
+        "Payment proof",
+        "Cancellation or return proof",
+        "Emails or chat with customer support"
+      ]
+    },
+    "service_deficiency": {
+      "keywords": ["bad service", "service deficiency", "not provided", "poor service", "delay", "repair refused"],
+      "rights": [
+        "You have the right to services performed with reasonable care.",
+        "You can claim refund or compensation for deficient service.",
+        "You can complain against delay, negligence, or refusal after payment.",
+        "You can approach the Consumer Commission for relief."
+      ],
+      "law": [
         "Consumer Protection Act, 2019"
       ],
       "steps": [
-        "Check the refund policy of the website or store",
-        "Send a written request for a refund with the order details",
-        "File a chargeback request with your bank if paid by card",
-        "File a case in Consumer Court if the amount is high"
+        "Send a written complaint to the service provider.",
+        "Ask for refund, completion of service, or compensation.",
+        "Keep proof of payment and service promise.",
+        "File a consumer complaint if the provider does not respond."
       ],
       "documents": [
-        "Order confirmation email or screenshot",
-        "Payment proof",
-        "Cancellation confirmation",
-        "Email thread with the seller"
+        "Invoice or receipt",
+        "Service agreement or booking proof",
+        "Photos or proof of poor service",
+        "Complaint emails or ticket number"
       ]
     },
-    "warranty_issue": {
+    "warranty_denied": {
+      "keywords": ["warranty", "guarantee", "service center", "repair denied", "replacement denied"],
       "rights": [
-        "Right to free repairs during the warranty period",
-        "Right to extension of warranty if the product is in repair for long",
-        "Right to free replacement if the product cannot be repaired"
+        "You can claim warranty service during the valid warranty period.",
+        "The company cannot deny genuine warranty without a valid reason.",
+        "You can ask for repair, replacement, or refund depending on the defect.",
+        "Repeated failed repairs may support a consumer complaint."
       ],
       "law": [
         "Consumer Protection Act, 2019",
         "Indian Contract Act, 1872"
       ],
       "steps": [
-        "Visit an authorized service center with the warranty card",
-        "Obtain a job sheet or service report from the center",
-        "Escalate the issue to the company's nodal officer",
-        "File a complaint for 'unfair trade practice' in Consumer Court"
+        "Visit an authorized service center and ask for a job sheet.",
+        "Request the denial reason in writing.",
+        "Escalate to the brand grievance officer.",
+        "File a consumer complaint if warranty is wrongly refused."
       ],
       "documents": [
-        "Original tax invoice",
-        "Stamped warranty card",
-        "Previous service/repair records",
-        "Photos of the product serial number"
+        "Purchase invoice",
+        "Warranty card",
+        "Service center job sheet",
+        "Photos or videos of defect"
       ]
     }
   }

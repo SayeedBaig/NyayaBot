@@ -1,76 +1,79 @@
 import json
-# Load JSON data
-with open("db/seed_data.json", "r") as file:
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA_PATH = os.path.join(BASE_DIR, "db", "seed_data.json")
+
+with open(DATA_PATH, "r", encoding="utf-8") as file:
     knowledge_data = json.load(file)
 
-
-# def get_legal_info(category: str):
-#     # Check if category exists
-#     if category in knowledge_data:
-#         category_data = knowledge_data[category]
-
-#         # Pick first subcase (for now)
-#         first_subcase = next(iter(category_data.values()))
-
-#         return {
-#             "rights": first_subcase.get("rights", []),
-#             "law": first_subcase.get("law", []),
-#             "steps": first_subcase.get("steps", []),
-#             "documents": first_subcase.get("documents", [])
-#         }
-
-#     # If category not found
-#     return {
-#         "rights": [],
-#         "law": [],
-#         "steps": [],
-#         "documents": []
-#     }
+# Try to initialize semantic retriever
+_retriever_available = False
+try:
+    from services.retriever import initialize as init_retriever, retrieve_best_match
+    init_retriever()
+    _retriever_available = True
+except Exception:
+    pass  # Will fallback to keyword matching
 
 
-def get_legal_info(category: str, text: str = ""):
+def _match_subcategory(category_data, text):
+    text_lower = (text or "").lower()
+    best_subcategory = None
+    best_score = 0
+
+    for subcategory, info in category_data.items():
+        keywords = info.get("keywords", [])
+        score = sum(1 for keyword in keywords if keyword.lower() in text_lower)
+        if score > best_score:
+            best_subcategory = subcategory
+            best_score = score
+
+    return best_subcategory
+
+
+def get_legal_info(category: str, subcategory: str = None, text: str = ""):
+    """
+    Get legal information with semantic retrieval + keyword fallback.
+    """
     if category not in knowledge_data:
         return {
             "subcategory": "unknown",
             "rights": [],
             "law": [],
             "steps": [],
-            "documents": []
+            "documents": [],
+            "similarity": 0.0,
         }
 
     category_data = knowledge_data[category]
-    text_lower = text.lower()
+    similarity = 0.0
+    selected_subcategory = None
 
-    # 🔹 Subcategory keyword mapping
-    subcategory = None
+    # Try semantic retrieval first
+    if text and _retriever_available:
+        try:
+            semantic_result = retrieve_best_match(text, category, top_k=1)
+            if semantic_result:
+                selected_subcategory = semantic_result.get("subcategory")
+                similarity = semantic_result.get("similarity", 0.0)
+        except Exception:
+            pass
 
-    if category == "labour":
-        if any(word in text_lower for word in ["salary", "wages"]):
-            subcategory = "unpaid_salary"
-        elif "termination" in text_lower:
-            subcategory = "wrongful_termination"
+    # Fallback to keyword matching if semantic failed
+    if not selected_subcategory:
+        selected_subcategory = subcategory if subcategory in category_data else None
+        selected_subcategory = selected_subcategory or _match_subcategory(category_data, text)
 
-    elif category == "tenant":
-        if any(word in text_lower for word in ["evict", "vacate"]):
-            subcategory = "eviction"
-        elif "deposit" in text_lower:
-            subcategory = "deposit_issue"
-
-    elif category == "consumer":
-        if any(word in text_lower for word in ["refund", "defect"]):
-            subcategory = "product_defect"
-
-    # 🔹 Fallback to first subcase
-    if subcategory and subcategory in category_data:
-        selected = category_data[subcategory]
-    else:
-        subcategory = next(iter(category_data.keys()))
-        selected = category_data[subcategory]
+    # Final fallback: use first subcategory
+    selected_subcategory = selected_subcategory or next(iter(category_data.keys()))
+    selected = category_data[selected_subcategory]
 
     return {
-        "subcategory": subcategory,
+        "subcategory": selected_subcategory,
         "rights": selected.get("rights", []),
         "law": selected.get("law", []),
         "steps": selected.get("steps", []),
-        "documents": selected.get("documents", [])
+        "documents": selected.get("documents", []),
+        "similarity": similarity,
     }

@@ -3,4 +3,9 @@ uvicorn
 scikit-learn
 pandas
 python-docx
-  
+googletrans==4.0.0-rc1
+deep-translator
+langdetect
+sentence-transformers
+openai
+numpy

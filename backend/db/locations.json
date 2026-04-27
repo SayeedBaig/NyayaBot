@@ -1,0 +1,71 @@
+{
+  "labour": [
+    {
+      "name": "Office of the Labour Commissioner, Bengaluru",
+      "address": "Karmika Bhavan, ITI Compound, Bannerghatta Road",
+      "phone": "080-22266100",
+      "hours": "10:00 AM - 5:30 PM",
+      "city": "Bengaluru"
+    },
+    {
+      "name": "Deputy Labour Commissioner Office, Delhi",
+      "address": "5-Sham Nath Marg, Civil Lines",
+      "phone": "011-23950215",
+      "hours": "9:30 AM - 6:00 PM",
+      "city": "Delhi"
+    },
+    {
+      "name": "Labour Commissioner Office, Mumbai",
+      "address": "Kamgar Bhavan, C-20, E-Block, Bandra Kurla Complex",
+      "phone": "022-26573844",
+      "hours": "10:00 AM - 5:45 PM",
+      "city": "Mumbai"
+    }
+  ],
+  "tenant": [
+    {
+      "name": "Rent Authority & Deputy Commissioner Office",
+      "address": "Kandaya Bhavan, KG Road, Ambedkar Veedhi",
+      "phone": "080-22211292",
+      "hours": "10:00 AM - 5:30 PM",
+      "city": "Bengaluru"
+    },
+    {
+      "name": "Rent Control Tribunal, Tis Hazari Courts",
+      "address": "Room No. 321, Tis Hazari Court Complex",
+      "phone": "011-23968413",
+      "hours": "10:00 AM - 5:00 PM",
+      "city": "Delhi"
+    },
+    {
+      "name": "Mumbai Small Causes Court (Rent Disputes)",
+      "address": "L.T. Marg, Dhobi Talao, Kalbadevi",
+      "phone": "022-22621087",
+      "hours": "10:30 AM - 5:30 PM",
+      "city": "Mumbai"
+    }
+  ],
+  "consumer": [
+    {
+      "name": "Karnataka State Consumer Disputes Redressal Commission",
+      "address": "Basava Bhavan, High Grounds",
+      "phone": "080-22250644",
+      "hours": "10:30 AM - 5:00 PM",
+      "city": "Bengaluru"
+    },
+    {
+      "name": "Delhi State Consumer Commission",
+      "address": "A-Block, Vikas Bhawan, IP Estate",
+      "phone": "011-23370258",
+      "hours": "10:00 AM - 4:30 PM",
+      "city": "Delhi"
+    },
+    {
+      "name": "Mumbai District Consumer Disputes Redressal Commission",
+      "address": "Administrative Building, 3rd Floor, Bandra East",
+      "phone": "022-26551625",
+      "hours": "10:30 AM - 5:30 PM",
+      "city": "Mumbai"
+    }
+  ]
+}

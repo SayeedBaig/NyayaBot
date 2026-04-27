@@ -1,51 +1,43 @@
-import random
+def _label(value):
+    return (value or "").replace("_", " ")
+
 
 def generate_response(data: dict):
     category = data.get("category", "")
+    subcategory = data.get("subcategory", "")
+    entities = data.get("entities", {})
     rights = data.get("rights", [])
     law = data.get("law", [])
     steps = data.get("steps", [])
     documents = data.get("documents", [])
 
-    # 🔹 Intro variations
-    intros = {
-        "labour": [
-            "It looks like you're facing a workplace-related issue.",
-            "This seems to be a labour-related concern.",
-            "You appear to be dealing with an employment issue."
-        ],
-        "tenant": [
-            "It seems you are facing a housing or rental issue.",
-            "This appears to be related to a tenant or landlord problem.",
-            "You may be dealing with a rental dispute."
-        ],
-        "consumer": [
-            "This looks like a consumer-related issue.",
-            "It seems you are facing a problem with a product or service.",
-            "You appear to have a consumer complaint."
-        ]
-    }
+    issue = entities.get("issue") or _label(subcategory) or _label(category) or "legal issue"
+    party = entities.get("opposite_party") or entities.get("employer")
+    duration = entities.get("duration")
 
-    intro = random.choice(intros.get(category, ["This appears to be a legal issue."]))
+    context_parts = []
+    if party:
+        context_parts.append(f"with {party}")
+    if duration:
+        context_parts.append(f"for {duration}")
 
-    # 🔹 Build parts with variation
-    parts = [intro]
-
-    if rights:
-        parts.append(f"You have legal rights, such as {rights[0]}.")
-
-    if law:
-        parts.append(f"This is supported by {law[0]}.")
+    context = f" {' '.join(context_parts)}" if context_parts else ""
+    summary = f"Based on your {issue}{context}, this appears to be a {category} matter."
 
     if steps:
-        parts.append(f"You can take steps like {', '.join(steps[:2])}.")
+        first_step = steps[0].strip().rstrip(".")
+        first_step = first_step[0].lower() + first_step[1:] if first_step else "collect proof"
+        summary += f" A practical first step is to {first_step}."
 
+    response_parts = [summary]
+    if rights:
+        response_parts.append(f"Your key right: {rights[0]}")
+    if law:
+        response_parts.append(f"Relevant law: {law[0]}")
     if documents:
-        parts.append(f"Keep documents ready, including {', '.join(documents[:2])}.")
-
-    # 🔹 Final response
-    response = " ".join(parts)
+        response_parts.append(f"Keep proof ready, especially {documents[0]}.")
 
     return {
-        "response": response.strip()
+        "summary": summary,
+        "response": " ".join(response_parts).strip(),
     }

@@ -1,3 +1,9 @@
+"""
+LLM Service Module
+Uses OpenAI API to refine responses for better readability.
+IMPORTANT: LLM only rewrites/personalizes - never generates legal facts.
+"""
+
 import os
 from typing import Optional
 
@@ -51,7 +57,21 @@ def _get_client():
     return _client
 
 
-REFINE_PROMPT = """You are a legal guidance assistant for Indian users. Your job is to explain legal rights and steps clearly and practically. Use simple language. Do not give vague answers. If user input is short, still try to give best possible guidance. Do NOT say 'need more details' unless absolutely necessary. Be helpful and action-oriented."""
+REFINE_PROMPT = """You are a legal assistant helping users understand their legal rights in simple, clear language.
+
+Rewrite the following legal guidance in human-friendly, easy-to-understand language.
+- Do NOT add new legal facts or advice
+- Do NOT mention specific laws unless already mentioned
+- Keep the same meaning but make it conversational
+- Use shorter sentences when possible
+- Maintain the key rights and steps already provided
+
+Original guidance:
+Summary: {summary}
+Rights: {rights}
+Steps: {steps}
+
+Rewrite this in simple, clear language:"""
 
 
 def refine_response(
@@ -98,8 +118,11 @@ def refine_response(
             elif opposite_party:
                 personalization = f"\nContext: Your issue is with {opposite_party}."
 
-        # Update prompt used for LLM
-        prompt = REFINE_PROMPT + user_query + personalization
+        prompt = REFINE_PROMPT.format(
+            summary=summary,
+            rights=rights_text,
+            steps=steps_text,
+        ) + personalization
 
         if OPENAI_ENDPOINT:
             response = client.ChatCompletion.create(
