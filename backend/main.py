@@ -1,6 +1,13 @@
 import os
 from typing import Optional
 
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from routes.analyze import router as analyze_router
+from routes.document import router as document_router
+from routes.locations import router as locations_router
+
 # Load .env file FIRST before reading any environment variables
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 try:
@@ -16,13 +23,28 @@ try:
 except ImportError:
     OPENAI_AVAILABLE = False
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 # Configure OpenAI - supports both API key and Azure OpenAI
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", "")
 OPENAI_ENDPOINT = os.environ.get("OPENAI_ENDPOINT", "")
 OPENAI_DEPLOYMENT = os.environ.get("OPENAI_DEPLOYMENT", "gpt-35-turbo")
 OPENAI_API_VERSION = os.environ.get("OPENAI_API_VERSION", "2023-05-15")
+
+app = FastAPI(title="NyayaBot API")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost",
+        "http://localhost:5173",
+        "http://127.0.0.1",
+        "http://127.0.0.1:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+app.include_router(analyze_router)
+app.include_router(document_router)
+app.include_router(locations_router)
 
 # Initialize OpenAI client if API key is available
 _client = None

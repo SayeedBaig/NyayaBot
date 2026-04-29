@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import "./App.css";
 import heroImage from "./assets/hero.png";
-import { generateDocument } from "./api/nyaybot";
+import { analyzeProblem, generateDocument, generateLegalReport, requestNextQuestion } from "./api/nyaybot";
 import ChatWindow from "./components/ChatWindow";
 import InputBar from "./components/InputBar";
 import LanguageSelector from "./components/LanguageSelector";
@@ -54,10 +54,23 @@ const toList = (value) => {
   return [value];
 };
 
+const createSessionId = () => {
+  if (typeof crypto !== "undefined" && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  return `session-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+};
+
 const getShortSummary = (data) => {
   const text = data.summary || data.short_response || data.response || "";
   if (text.length <= 180) return text;
   return `${text.slice(0, 177).trim()}...`;
+};
+
+const getInputPlaceholder = (question) => {
+  if (!question) return "Describe your problem...";
+  if (question.toLowerCase().includes("which city")) return "Enter your city...";
+  return "Type your answer...";
 };
 
 const App = () => {
@@ -66,18 +79,14 @@ const App = () => {
   const [inputError, setInputError] = useState("");
   const [language, setLanguage] = useState("en");
   const [isLoading, setIsLoading] = useState(false);
-  const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false);
-  const [documentForm, setDocumentForm] = useState({
-    user_name: "",
-    opposite_party: "",
-    issue: "",
-    details: "",
-  });
-  const [documentError, setDocumentError] = useState("");
   const [isGeneratingDocument, setIsGeneratingDocument] = useState(false);
   const [theme, setTheme] = useState("dark");
   const [resultData, setResultData] = useState(null);
   const [lastQuestion, setLastQuestion] = useState("");
+  const [awaitingMoreDetails, setAwaitingMoreDetails] = useState(false);
+  const [sessionId, setSessionId] = useState(() => createSessionId());
+  const [currentFollowUpQuestion, setCurrentFollowUpQuestion] = useState("");
+  const [isGeneratingReport, setIsGeneratingReport] = useState(false);
   const resultRef = useRef(null);
   const messageIdRef = useRef(0);
 
@@ -130,45 +139,39 @@ const App = () => {
     setIsLoading(true);
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/analyze", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          text: cleanText,
-          language: language,
-        }),
-      });
-
-      if (!res.ok) {
-        throw new Error("Request failed");
+      const data = await analyzeProblem(cleanText, sessionId, language);
+      if (data.session_id) {
+        setSessionId(data.session_id);
       }
-
-      const data = await res.json();
       const shortSummary = getShortSummary(data);
       const fullResponse = {
         category: data.category || "unknown",
         subcategory: data.subcategory || "unknown",
-        confidence: data.confidence || 0,
-        entities: data.entities || {},
         response: data.response || "",
-        summary: data.summary || data.message || data.response || shortSummary,
+        summary: data.summary || "",
         rights: toList(data.rights),
-        law: toList(data.law),
         steps: toList(data.steps),
         documents: toList(data.documents),
         locations: toList(data.locations),
+        nextActions: toList(data.next_actions),
+        report: data.report || null,
+        stage: data.stage || "ready",
+        location_note: data.location_note || "",
       };
 
-      setResultData(data.ok === false ? null : fullResponse);
+      const questionText = data.question || "";
+      const hasFinalResult = Boolean(data.summary);
+
+      setResultData(hasFinalResult ? fullResponse : null);
+      setAwaitingMoreDetails(Boolean(questionText) && !hasFinalResult);
+      setCurrentFollowUpQuestion(Boolean(questionText) && !hasFinalResult ? questionText : "");
       setMessages((prev) =>
         prev.map((message) =>
           message.id === loadingId
             ? {
                 id: getMessageId("bot"),
                 sender: "bot",
-                text: data.ok === false ? data.message : shortSummary,
+                text: questionText || data.message || shortSummary,
               }
             : message,
         ),
@@ -191,51 +194,16 @@ const App = () => {
     }
   };
 
-  const handleOpenDocumentModal = () => {
-    if (!resultData) return;
-    const entities = resultData.entities || {};
-
-    setDocumentForm({
-      user_name: "",
-      opposite_party: entities.opposite_party || entities.employer || "",
-      issue: entities.issue || resultData.summary || lastQuestion,
-      details: lastQuestion || resultData.response || resultData.summary || "",
-    });
-    setDocumentError("");
-    setIsDocumentModalOpen(true);
-  };
-
-  const handleDocumentFieldChange = (field, value) => {
-    setDocumentForm((current) => ({
-      ...current,
-      [field]: value,
-    }));
-    setDocumentError("");
-  };
-
-  const handleGenerateDocument = async (event) => {
-    event.preventDefault();
-    if (!resultData) return;
-
-    const hasEmptyField = Object.values(documentForm).some((value) => !value.trim());
-    if (hasEmptyField) {
-      setDocumentError("Please fill all fields before generating the document.");
-      return;
-    }
+  const handleGenerateDocument = async () => {
+    if (!resultData || !resultData.report || isGeneratingDocument) return;
 
     setIsGeneratingDocument(true);
     try {
       await generateDocument({
-        category: resultData.category,
-        user_name: documentForm.user_name.trim(),
-        opposite_party: documentForm.opposite_party.trim(),
-        issue: documentForm.issue.trim(),
-        details: documentForm.details.trim(),
+        report: resultData.report,
       });
-      setIsDocumentModalOpen(false);
     } catch (error) {
       console.error(error);
-      setDocumentError("Unable to generate the document. Please try again.");
     } finally {
       setIsGeneratingDocument(false);
     }
@@ -248,9 +216,91 @@ const App = () => {
     });
   };
 
+  const handleAskNextQuestion = async () => {
+    if (!sessionId || isLoading) return;
+
+    const loadingId = getMessageId("loading");
+    setMessages((prev) => [
+      ...prev,
+      { id: loadingId, sender: "bot", text: "Getting the next question", loading: true },
+    ]);
+    setIsLoading(true);
+
+    try {
+      const data = await requestNextQuestion(sessionId);
+      if (data.session_id) {
+        setSessionId(data.session_id);
+      }
+      const questionText = data.question || data.message || "Please continue with more details.";
+      setCurrentFollowUpQuestion(data.question ? questionText : "");
+      setAwaitingMoreDetails(Boolean(data.question));
+      setMessages((prev) =>
+        prev.map((message) =>
+          message.id === loadingId
+            ? { id: getMessageId("bot"), sender: "bot", text: questionText }
+            : message,
+        ),
+      );
+    } catch (error) {
+      console.error(error);
+      setMessages((prev) =>
+        prev.map((message) =>
+          message.id === loadingId
+            ? { id: getMessageId("bot-error"), sender: "bot", text: "Sorry, I could not fetch the next question." }
+            : message,
+        ),
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGenerateReport = async () => {
+    if (!resultData || resultData.stage !== "ready" || isGeneratingReport) return;
+
+    setIsGeneratingReport(true);
+    try {
+      const data = await generateLegalReport(sessionId, "");
+      if (data.session_id) {
+        setSessionId(data.session_id);
+      }
+      if (data.ok === false) {
+        setMessages((prev) => [
+          ...prev,
+          { id: getMessageId("bot"), sender: "bot", text: data.message || "The report is not ready yet." },
+        ]);
+        if (data.follow_up) {
+          setAwaitingMoreDetails(true);
+          setCurrentFollowUpQuestion(data.question || "");
+        }
+        return;
+      }
+
+      setResultData((current) => {
+        if (!current) return current;
+        return {
+          ...current,
+          report: data.report || null,
+          locations: toList(data.locations),
+          location_note: data.location_note || current.location_note || "",
+          summary: data.summary || current.summary,
+          response: data.response || current.response,
+        };
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsGeneratingReport(false);
+    }
+  };
+
   const handleAskAnother = () => {
     setInput("");
     setInputError("");
+    setAwaitingMoreDetails(false);
+    setCurrentFollowUpQuestion("");
+    setResultData(null);
+    setSessionId(createSessionId());
   };
 
   return (
@@ -382,7 +432,16 @@ const App = () => {
               onSend={sendMessage}
               disabled={isLoading}
               error={inputError}
+              placeholder={getInputPlaceholder(currentFollowUpQuestion)}
             />
+            {awaitingMoreDetails && (
+              <div className="result-actions">
+                <button className="action-button" type="button" onClick={handleAskNextQuestion} disabled={isLoading}>
+                  Ask Next Question
+                </button>
+                {currentFollowUpQuestion && <p>{currentFollowUpQuestion}</p>}
+              </div>
+            )}
           </section>
 
           {resultData && (
@@ -390,11 +449,17 @@ const App = () => {
               <ResultPanel
                 summary={resultData.summary || resultData.response}
                 rights={resultData.rights}
-                law={resultData.law}
                 steps={resultData.steps}
                 documents={resultData.documents}
                 locations={resultData.locations}
-                onGenerateDocument={handleOpenDocumentModal}
+                nextActions={resultData.nextActions}
+                locationNote={resultData.location_note}
+                report={resultData.report}
+                reportReady={true}
+                onGenerateReport={handleGenerateReport}
+                isGeneratingReport={isGeneratingReport}
+                onGenerateDocument={handleGenerateDocument}
+                isGeneratingDocument={isGeneratingDocument}
                 onViewLocations={handleViewLocations}
                 onAskAnother={handleAskAnother}
               />
@@ -430,73 +495,6 @@ const App = () => {
         </div>
       </footer>
 
-      {isDocumentModalOpen && (
-        <div className="modal-backdrop" role="presentation">
-          <section className="document-modal" role="dialog" aria-modal="true" aria-labelledby="document-modal-title">
-            <div className="modal-header">
-              <div>
-                <p className="section-kicker">Complaint Letter</p>
-                <h2 id="document-modal-title">Generate Complaint Letter</h2>
-              </div>
-              <button
-                className="modal-close"
-                type="button"
-                onClick={() => setIsDocumentModalOpen(false)}
-                aria-label="Close document form"
-              >
-                X
-              </button>
-            </div>
-
-            <form className="document-form" onSubmit={handleGenerateDocument}>
-              <label>
-                Your Name
-                <input
-                  value={documentForm.user_name}
-                  onChange={(event) => handleDocumentFieldChange("user_name", event.target.value)}
-                  placeholder="Enter your full name"
-                />
-              </label>
-              <label>
-                Opposite Party
-                <input
-                  value={documentForm.opposite_party}
-                  onChange={(event) => handleDocumentFieldChange("opposite_party", event.target.value)}
-                  placeholder="Employer, landlord, seller, or company"
-                />
-              </label>
-              <label>
-                Issue
-                <input
-                  value={documentForm.issue}
-                  onChange={(event) => handleDocumentFieldChange("issue", event.target.value)}
-                  placeholder="Short issue title"
-                />
-              </label>
-              <label>
-                Details
-                <textarea
-                  value={documentForm.details}
-                  onChange={(event) => handleDocumentFieldChange("details", event.target.value)}
-                  placeholder="Describe what happened"
-                  rows="5"
-                />
-              </label>
-
-              {documentError && <p className="form-error">{documentError}</p>}
-
-              <div className="modal-actions">
-                <button type="button" className="action-button" onClick={() => setIsDocumentModalOpen(false)}>
-                  Cancel
-                </button>
-                <button type="submit" className="action-button primary-action" disabled={isGeneratingDocument}>
-                  {isGeneratingDocument ? "Generating..." : "Generate Document"}
-                </button>
-              </div>
-            </form>
-          </section>
-        </div>
-      )}
     </div>
   );
 };

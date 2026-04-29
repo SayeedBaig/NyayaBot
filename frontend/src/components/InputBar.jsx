@@ -1,6 +1,6 @@
 import React from "react";
 
-const InputBar = ({ value, onChange, onSend, disabled = false, error = "" }) => {
+const InputBar = ({ value, onChange, onSend, disabled = false, error = "", placeholder = "Describe your problem..." }) => {
   const handleSend = () => {
     if (!value.trim() || disabled) return;
     onSend(value);
@@ -13,7 +13,7 @@ const InputBar = ({ value, onChange, onSend, disabled = false, error = "" }) => 
           className="message-input"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          placeholder="Describe your problem..."
+          placeholder={placeholder}
           disabled={disabled}
           onKeyDown={(e) => {
             if (e.key === "Enter") handleSend();

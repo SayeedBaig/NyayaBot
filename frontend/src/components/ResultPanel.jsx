@@ -27,23 +27,34 @@ const ResultSection = ({ title, items }) => {
 const ResultPanel = ({
   summary,
   rights,
-  law,
   steps,
   documents,
   locations,
+  nextActions,
+  locationNote,
+  report,
+  reportReady,
+  onGenerateReport,
+  isGeneratingReport,
   onGenerateDocument,
+  isGeneratingDocument,
   onViewLocations,
   onAskAnother,
 }) => {
   const hasLocations = locations && locations.length > 0;
+  const canGenerateDocument = Boolean(report);
 
   return (
     <section className="result-panel" aria-label="Structured legal guidance">
       <div className="result-header">
         <p className="section-kicker">Legal Guidance</p>
         <h2>Your action plan</h2>
-        <button className="action-button primary-action result-header-action" onClick={onGenerateDocument}>
-          Generate Complaint Letter
+        <button
+          className="action-button primary-action result-header-action"
+          onClick={onGenerateReport}
+          disabled={!reportReady || isGeneratingReport}
+        >
+          {isGeneratingReport ? "Preparing..." : "Generate Legal Report"}
         </button>
       </div>
 
@@ -54,12 +65,26 @@ const ResultPanel = ({
         </section>
       )}
 
+      {locationNote && (
+        <section className="result-section">
+          <h3>Location Update</h3>
+          <p>{locationNote}</p>
+        </section>
+      )}
+
       <div className="result-grid">
         <ResultSection title="Your Rights" items={rights} />
-        <ResultSection title="Applicable Law" items={law} />
         <ResultSection title="Steps to Take" items={steps} />
         <ResultSection title="Required Documents" items={documents} />
+        <ResultSection title="Next Actions" items={nextActions} />
       </div>
+
+      {report && (
+        <section className="result-section">
+          <h3>Legal Report</h3>
+          <p>{report.summary || report.response}</p>
+        </section>
+      )}
 
       {hasLocations && (
         <section className="result-section locations-section" id="nearby-offices">
@@ -73,8 +98,8 @@ const ResultPanel = ({
       )}
 
       <div className="result-actions">
-        <button className="action-button primary-action" onClick={onGenerateDocument}>
-          Download Complaint Letter
+        <button className="action-button primary-action" onClick={onGenerateDocument} disabled={!canGenerateDocument || isGeneratingDocument}>
+          {isGeneratingDocument ? "Preparing PDF..." : "Download PDF Report"}
         </button>
         <button className="action-button" onClick={onViewLocations} disabled={!hasLocations}>
           View Nearby Offices

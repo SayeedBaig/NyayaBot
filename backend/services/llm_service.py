@@ -1,10 +1,11 @@
 """
 LLM Service Module
-Uses OpenAI API to refine responses for better readability.
-IMPORTANT: LLM only rewrites/personalizes - never generates legal facts.
+Uses OpenAI API to turn retrieved legal context into practical guidance.
+IMPORTANT: LLM only uses facts already available in the pipeline context.
 """
 
 import os
+import re
 from typing import Optional
 
 # Load .env file FIRST before reading any environment variables
@@ -57,25 +58,43 @@ def _get_client():
     return _client
 
 
-REFINE_PROMPT = """You are a legal assistant helping users understand their legal rights in simple, clear language.
+SYSTEM_PROMPT = "You are a legal assistant."
 
-Rewrite the following legal guidance in human-friendly, easy-to-understand language.
-- Do NOT add new legal facts or advice
-- Do NOT mention specific laws unless already mentioned
-- Keep the same meaning but make it conversational
-- Use shorter sentences when possible
-- Maintain the key rights and steps already provided
+USER_PROMPT_TEMPLATE = """Rewrite the given legal guidance clearly and professionally.
 
-Original guidance:
-Summary: {summary}
-Rights: {rights}
-Steps: {steps}
+Rules:
+- Use simple English
+- Fix grammar mistakes
+- Keep sentences short and clear
+- Do NOT add new legal facts
+- Do NOT change meaning
+- Make it sound confident and helpful
 
-Rewrite this in simple, clear language:"""
+Format:
+- First 1-2 lines: summary
+- Then clear explanation
+
+Input:
+{response}
+
+Output only improved text."""
+
+
+def _cleanup_refined_text(text: str) -> str:
+    cleaned = (text or "").strip()
+    if not cleaned:
+        return cleaned
+
+    cleaned = cleaned.replace("start by keep", "start by keeping")
+    cleaned = re.sub(r"\b(\w+)(\s+\1\b)+", r"\1", cleaned, flags=re.IGNORECASE)
+    cleaned = cleaned[0].upper() + cleaned[1:] if cleaned else cleaned
+    return cleaned
 
 
 def refine_response(
     summary: str,
+    category: str,
+    subcategory: str,
     rights: list,
     steps: list,
     user_query: str,
@@ -86,6 +105,8 @@ def refine_response(
 
     Args:
         summary: Generated summary
+        category: Predicted legal category
+        subcategory: Predicted legal subcategory
         rights: List of legal rights
         steps: List of action steps
         user_query: Original user query
@@ -96,50 +117,53 @@ def refine_response(
     """
     client = _get_client()
 
+    def _fallback_response():
+        lines = [summary]
+        if rights:
+            lines.append(f"Your key right is: {rights[0]}")
+        if steps:
+            lines.append(f"Next step: {steps[0]}")
+        if len(steps) > 1:
+            lines.append(f"After that: {steps[1]}")
+        if len(lines) < 4 and len(rights) > 1:
+            lines.append(f"Also keep in mind: {rights[1]}")
+        return "\n".join(lines[:6]).strip()
+
     if not client or not OPENAI_API_KEY:
         # Fallback: return original response
         return {
             "refined": False,
             "summary": summary,
-            "response": f"{summary} {' '.join(rights[:1])}",
+            "response": _cleanup_refined_text(_fallback_response()),
         }
 
     try:
-        rights_text = "\n".join(f"- {r}" for r in rights[:2])
-        steps_text = "\n".join(f"{i+1}. {s}" for i, s in enumerate(steps[:2]))
-
-        # Add personalization if available
-        personalization = ""
-        if entities:
-            employer = entities.get("employer")
-            opposite_party = entities.get("opposite_party")
-            if employer:
-                personalization = f"\nContext: Your issue is with {employer}."
-            elif opposite_party:
-                personalization = f"\nContext: Your issue is with {opposite_party}."
-
-        prompt = REFINE_PROMPT.format(
-            summary=summary,
-            rights=rights_text,
-            steps=steps_text,
-        ) + personalization
+        prompt = USER_PROMPT_TEMPLATE.format(
+            response=_fallback_response(),
+        )
 
         if OPENAI_ENDPOINT:
             response = client.ChatCompletion.create(
                 engine=OPENAI_DEPLOYMENT,
-                messages=[{"role": "user", "content": prompt}],
+                messages=[
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {"role": "user", "content": prompt},
+                ],
                 temperature=0.3,
                 max_tokens=300,
             )
-            refined_text = response.choices[0].message.content.strip()
+            refined_text = _cleanup_refined_text(response.choices[0].message.content.strip())
         else:
             response = client.ChatCompletion.create(
                 model="gpt-3.5-turbo",
-                messages=[{"role": "user", "content": prompt}],
+                messages=[
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {"role": "user", "content": prompt},
+                ],
                 temperature=0.3,
                 max_tokens=300,
             )
-            refined_text = response.choices[0].message.content.strip()
+            refined_text = _cleanup_refined_text(response.choices[0].message.content.strip())
 
         return {
             "refined": True,
@@ -152,7 +176,7 @@ def refine_response(
         return {
             "refined": False,
             "summary": summary,
-            "response": f"{summary} {' '.join(rights[:1])}",
+            "response": _cleanup_refined_text(_fallback_response()),
         }
 
 

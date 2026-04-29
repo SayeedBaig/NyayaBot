@@ -116,11 +116,22 @@ def retrieve_best_match(query: str, category: str, top_k: int = 1) -> Optional[d
 
     if top_k == 1:
         if similarities and similarities[0][1] > 0.2:
+            print(
+                f"[retriever] category={category} "
+                f"subcategory={similarities[0][0]} "
+                f"similarity={similarities[0][1]:.4f}"
+            )
             return {
                 "subcategory": similarities[0][0],
                 "info": similarities[0][2],
                 "similarity": similarities[0][1],
             }
+        top_similarity = similarities[0][1] if similarities else None
+        print(
+            f"[retriever] category={category} "
+            f"subcategory=None "
+            f"similarity={f'{top_similarity:.4f}' if top_similarity is not None else 'None'}"
+        )
         return None
 
     return [

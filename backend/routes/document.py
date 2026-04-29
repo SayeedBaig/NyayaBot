@@ -8,25 +8,15 @@ router = APIRouter()
 
 @router.post("/generate-document")
 def create_document(data: dict):
-    category = data.get("category")
-    user_name = (data.get("user_name") or "").strip()
-    details = (data.get("details") or "").strip()
-    opposite_party = (data.get("opposite_party") or "").strip()
-    issue = (data.get("issue") or "").strip()
+    report = data.get("report") or {}
 
-    if not all([category, user_name, details, opposite_party, issue]):
-        raise HTTPException(status_code=400, detail="All document fields are required")
+    if not report:
+        raise HTTPException(status_code=400, detail="Report data is required")
 
-    file_path = generate_document(
-        category,
-        user_name,
-        details,
-        opposite_party,
-        issue,
-    )
+    file_path = generate_document(report)
 
     return FileResponse(
         path=file_path,
-        filename="complaint.docx",
-        media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        filename="legalease-ai-report.pdf",
+        media_type="application/pdf",
     )

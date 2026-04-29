@@ -3,6 +3,7 @@ uvicorn
 scikit-learn
 pandas
 python-docx
+reportlab
 googletrans==4.0.0-rc1
 deep-translator
 langdetect

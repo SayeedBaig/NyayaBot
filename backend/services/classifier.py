@@ -123,7 +123,7 @@ def predict_category(text: str):
 
     subcategory = _keyword_subcategory(category, normalized)
 
-    if confidence < 0.6:
+    if confidence < 0.3:
         return {
             "category": "unknown",
             "subcategory": "unknown",
